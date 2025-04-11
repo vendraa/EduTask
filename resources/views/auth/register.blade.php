@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Sign Up| EduTask</title>
+    <title>Sign Up | EduTask</title>
 
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     
@@ -222,8 +222,8 @@
             <x-common-grid-shape />
 
             <div class="flex flex-col items-center max-w-xs">
-              <a href="index.html" class="block mb-4">
-                <img src="./images/logo/auth-logo.svg" alt="Logo" />
+              <a href="{{ route('register') }}" class="block mb-4">
+                <img src="./images/logo/auth-logo.png" alt="Logo" />
               </a>
               <p class="text-center text-gray-400 dark:text-white/60">
                 Free and Open-Source Tailwind CSS Admin Dashboard Template
