@@ -98,7 +98,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Add click event listener to the search button
-  searchButton.addEventListener("click", focusSearchInput);
+  if (searchButton && searchInput) {
+    searchButton.addEventListener("click", focusSearchInput);
+
+    document.addEventListener("keydown", function (event) {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        focusSearchInput();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "/" && document.activeElement !== searchInput) {
+        event.preventDefault();
+        focusSearchInput();
+      }
+    });
+  }
 
   // Add keyboard event listener for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
   document.addEventListener("keydown", function (event) {

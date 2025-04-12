@@ -32,7 +32,7 @@
     class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear"
   >
     <!-- Sidebar Menu -->
-    <nav x-data="{selected: $persist('Dashboard')}">
+    <nav x-data="{ selected: '{{ $selected ?? '' }}' }">
       <!-- Menu Group -->
       <div>
         <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
@@ -63,15 +63,20 @@
 
         <ul class="mb-6 flex flex-col gap-4">
           <!-- Menu Item Dashboard -->
+          @php
+            $userRole = auth()->user()?->role;
+            $dashboardRoute = $userRole === 'dosen' ? route('dashboard.dosen') : route('dashboard.mahasiswa');
+            $isDashboardActive = ($selected ?? '') === 'Dashboard' || ($page ?? '') === 'dashboard';
+          @endphp
           <li>
             <a
-              href="{{ route(auth()->user()?->role === 'dosen' ? 'dashboard.dosen' : 'dashboard.mahasiswa') }}"
-              @click.prevent="selected = (selected === 'Dashboard' ? '' : 'Dashboard')"
+              href="{{ $dashboardRoute }}"
+              @click="selected = (selected === 'Dashboard' ? '' : 'Dashboard')"
               class="menu-item group"
-              :class="selected === 'Dashboard' ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="{{ json_encode($isDashboardActive) }} ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="selected === 'Dashboard' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="{{ json_encode($isDashboardActive) }} ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -96,16 +101,21 @@
           </li>
           <!-- Menu Item Dashboard -->
 
-          <!-- Menu Item Calendar -->
+          <!-- Menu Item Pengumuman -->
+          @php
+            $userRole = auth()->user()?->role;
+            $pengumumanRoute = $userRole === 'dosen' ? route('announcement.dosen.index') : route('announcement.mahasiswa.index');
+            $isPengumumanActive = ($selected ?? '') === 'Pengumuman' || ($page ?? '') === 'pengumuman';
+          @endphp
           <li>
             <a
-              href="calendar.html"
-              @click="selected = (selected === 'Calendar' ? '':'Calendar')"
+              href="{{ $pengumumanRoute }}"
+              @click="selected = (selected === 'Pengumuman' ? '' : 'Pengumuman')"
               class="menu-item group"
-              :class=" (selected === 'Calendar') && (page === 'calendar') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="{{ json_encode($isPengumumanActive) }} ? 'menu-item-active' : 'menu-item-inactive'"
             >
-              <svg
-                :class="(selected === 'Calendar') && (page === 'calendar') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+            <svg
+                :class="{{ json_encode($isPengumumanActive) }} ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -119,186 +129,186 @@
                   fill=""
                 />
               </svg>
-
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
-              >
+          
+              <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
                 Pengumuman
               </span>
             </a>
           </li>
-          <!-- Menu Item Calendar -->
+          <!-- Menu Item Pengumuman -->
 
           <!-- Menu Item Task -->
+          @php
+            $currentPage = $page ?? '';
+            $selectedMenu = $selected ?? '';
+            $isTaskActive = $selectedMenu === 'Task' || in_array($currentPage, ['taskList', 'taskKanban']);
+        
+            $userRole = auth()->user()?->role;
+        
+            $taskRoutes = [
+                'dosen' => [
+                    'create' => route('tasks.dosen.create'),
+                    'list' => route('tasks.dosen.index'),
+                    'submitted' => route('tasks.dosen.submitted'),
+                    'history' => route('tasks.dosen.history'),
+                ],
+                'mahasiswa' => [
+                    'list' => route('tasks.mahasiswa.index'),
+                    'history' => route('tasks.mahasiswa.history'),
+                ],
+            ];
+          @endphp
           <li>
             <a
               href="#"
-              @click.prevent="selected = (selected === 'Task' ? '':'Task')"
+              @click.prevent="selected = (selected === 'Task' ? '' : 'Task')"
               class="menu-item group"
-              :class=" (selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="selected === 'Task' || ['taskList', 'taskKanban', 'taskAdd'].includes('{{ $currentPage }}') ? 'menu-item-active' : 'menu-item-inactive'"
             >
+            <div class="flex items-center gap-3">
               <svg
-                :class="(selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                class="shrink-0"
+                :class="{{ json_encode($isTaskActive) }} ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
                   d="M7.75586 5.50098C7.75586 5.08676 8.09165 4.75098 8.50586 4.75098H18.4985C18.9127 4.75098 19.2485 5.08676 19.2485 5.50098L19.2485 15.4956C19.2485 15.9098 18.9127 16.2456 18.4985 16.2456H8.50586C8.09165 16.2456 7.75586 15.9098 7.75586 15.4956V5.50098ZM8.50586 3.25098C7.26322 3.25098 6.25586 4.25834 6.25586 5.50098V6.26318H5.50195C4.25931 6.26318 3.25195 7.27054 3.25195 8.51318V18.4995C3.25195 19.7422 4.25931 20.7495 5.50195 20.7495H15.4883C16.7309 20.7495 17.7383 19.7421 17.7383 18.4995L17.7383 17.7456H18.4985C19.7411 17.7456 20.7485 16.7382 20.7485 15.4956L20.7485 5.50097C20.7485 4.25833 19.7411 3.25098 18.4985 3.25098H8.50586ZM16.2383 17.7456H8.50586C7.26322 17.7456 6.25586 16.7382 6.25586 15.4956V7.76318H5.50195C5.08774 7.76318 4.75195 8.09897 4.75195 8.51318V18.4995C4.75195 18.9137 5.08774 19.2495 5.50195 19.2495H15.4883C15.9025 19.2495 16.2383 18.9137 16.2383 18.4995L16.2383 17.7456Z"
-                  fill=""
+                  fill="currentColor"
                 />
               </svg>
-
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
-              >
-                Manajemen Tugas
-              </span>
+              <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Manajemen Tugas</span>
+            </div>
 
               <svg
-                class="menu-item-arrow"
-                :class="[(selected === 'Task') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
-                width="20"
-                height="20"
+                class="ml-auto w-5 h-5 self-center"
+                :class="[(selected === 'Task') ? 'rotate-180 stroke-brand-500 dark:stroke-brand-400' : 'stroke-gray-500 group-hover:stroke-gray-700 dark:stroke-gray-400 dark:group-hover:stroke-gray-300', sidebarToggle ? 'lg:hidden' : '' ]"
                 viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                  stroke=""
+                  stroke="currentColor"
                   stroke-width="1.5"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
               </svg>
             </a>
-
-            <!-- Dropdown Menu Start -->
-            <div
-              class="translate transform overflow-hidden"
-              :class="(selected === 'Task') ? 'block' :'hidden'"
-            >
-              <ul
-                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
-              >
-                <li>
-                  <a
-                    href="task-list.html"
-                    class="menu-dropdown-item group"
-                    :class="page === 'taskList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    Tambah Tugas
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="task-kanban.html"
-                    class="menu-dropdown-item group"
-                    :class="page === 'taskKanban' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    Daftar Tugas
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="task-kanban.html"
-                    class="menu-dropdown-item group"
-                    :class="page === 'taskKanban' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    Tugas Terkumpul
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="task-kanban.html"
-                    class="menu-dropdown-item group"
-                    :class="page === 'taskKanban' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    Riwayat Tugas
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <!-- Dropdown Menu End -->
+          
+              <!-- Dropdown Start -->
+              <div class="translate transform overflow-hidden" :class="(selected === 'Task') ? 'block' : 'hidden'">
+                  <ul :class="['menu-dropdown mt-2 flex flex-col gap-1 pl-9', sidebarToggle ? 'lg:hidden' : 'flex']">
+          
+                      @if ($userRole === 'dosen')
+                          <li>
+                              <a href="{{ $taskRoutes['dosen']['create'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskAdd' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Tambah Tugas
+                              </a>
+                          </li>
+                          <li>
+                              <a href="{{ $taskRoutes['dosen']['list'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Daftar Tugas
+                              </a>
+                          </li>
+                          <li>
+                              <a href="{{ $taskRoutes['dosen']['submitted'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskSubmitted' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Tugas Terkumpul
+                              </a>
+                          </li>
+                          <li>
+                              <a href="{{ $taskRoutes['dosen']['history'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskHistory' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Riwayat Tugas
+                              </a>
+                          </li>
+                      @elseif ($userRole === 'mahasiswa')
+                          <li>
+                              <a href="{{ $taskRoutes['mahasiswa']['list'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Daftar Tugas
+                              </a>
+                          </li>
+                          <li>
+                              <a href="{{ $taskRoutes['mahasiswa']['history'] }}"
+                                  class="menu-dropdown-item group"
+                                  :class="page === 'taskHistory' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
+                                  Riwayat Tugas
+                              </a>
+                          </li>
+                      @endif
+          
+                  </ul>
+              </div>
+              <!-- Dropdown End -->
           </li>
           <!-- Menu Item Task -->
 
-          <!-- Menu Item Forms -->
-          <li>
-            <a
-              href="#"
-              @click.prevent="selected = (selected === 'Forms' ? '':'Forms')"
-              class="menu-item group"
-              :class=" (selected === 'Forms') || (page === 'formElements' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-active' : 'menu-item-inactive'"
-            >
-              <svg
-                :class="(selected === 'Forms') || (page === 'formElements' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z"
-                  fill=""
-                />
-              </svg>
-
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
-              >
-                Penilaian Tugas
-              </span>
-            </a>
-          </li>
-          <!-- Menu Item Forms -->
-
           <!-- Menu Item Tables -->
+          @php
+            $userRole = auth()->user()?->role;
+
+            $kelasRoutes = [
+              'dosen' => [
+                'dosenList' => route('daftarDosen.dosen.index'),      // contoh: route('kelas.dosen.index')
+                'mahasiswaList' => route('daftarMahasiswa.dosen.index'),
+              ],
+              'mahasiswa' => [
+                'dosenList' => route('daftarDosen.mahasiswa.index'),      // atau kosongkan jika tidak perlu
+                'mahasiswaList' => route('daftarMahasiswa.mahasiswa.index'),
+              ],
+            ];
+
+            $isKelasActive = ($selected ?? '') === 'Kelas' || in_array(($page ?? ''), ['daftarDosen', 'daftarMahasiswa']);
+          @endphp
           <li>
             <a
               href="#"
-              @click.prevent="selected = (selected === 'Tables' ? '':'Tables')"
+              @click.prevent="selected = (selected === 'Kelas' ? '':'Kelas')"
               class="menu-item group"
-              :class="(selected === 'Tables') || (page === 'basicTables' || page === 'dataTables') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="{{ json_encode($isKelasActive) }} ? 'menu-item-active' : 'menu-item-inactive'"
             >
+            <div class="flex items-center gap-3">
               <svg
-                :class="(selected === 'Tables') || (page === 'basicTables' || page === 'dataTables') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                class="shrink-0"
+                :class="{{ json_encode($isKelasActive) }} ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.25 5.5C3.25 4.25736 4.25736 3.25 5.5 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V18.5C20.75 19.7426 19.7426 20.75 18.5 20.75H5.5C4.25736 20.75 3.25 19.7426 3.25 18.5V5.5ZM5.5 4.75C5.08579 4.75 4.75 5.08579 4.75 5.5V8.58325L19.25 8.58325V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H5.5ZM19.25 10.0833H15.416V13.9165H19.25V10.0833ZM13.916 10.0833L10.083 10.0833V13.9165L13.916 13.9165V10.0833ZM8.58301 10.0833H4.75V13.9165H8.58301V10.0833ZM4.75 18.5V15.4165H8.58301V19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5ZM10.083 19.25V15.4165L13.916 15.4165V19.25H10.083ZM15.416 19.25V15.4165H19.25V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15.416Z"
-                  fill=""
-                />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M3.25 5.5C3.25 4.25736 4.25736 3.25 5.5 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V18.5C20.75 19.7426 19.7426 20.75 18.5 20.75H5.5C4.25736 20.75 3.25 19.7426 3.25 18.5V5.5ZM5.5 4.75C5.08579 4.75 4.75 5.08579 4.75 5.5V8.58325L19.25 8.58325V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H5.5ZM19.25 10.0833H15.416V13.9165H19.25V10.0833ZM13.916 10.0833L10.083 10.0833V13.9165L13.916 13.9165V10.0833ZM8.58301 10.0833H4.75V13.9165H8.58301V10.0833ZM4.75 18.5V15.4165H8.58301V19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5ZM10.083 19.25V15.4165L13.916 15.4165V19.25H10.083ZM15.416 19.25V15.4165H19.25V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15.416Z"
+                fill=""
+              />
               </svg>
-
               <span
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
                 Manajemen Kelas
               </span>
+            </div>
 
               <svg
-                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'Tables') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                class="ml-auto w-5 h-5 self-center"
+                :class="[(selected === 'Kelas') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -318,7 +328,7 @@
             <!-- Dropdown Menu Start -->
             <div
               class="translate transform overflow-hidden"
-              :class="(selected === 'Tables') ? 'block' :'hidden'"
+              :class="(selected === 'Kelas') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
@@ -326,18 +336,18 @@
               >
                 <li>
                   <a
-                    href="basic-tables.html"
+                    href="{{ $kelasRoutes[$userRole]['dosenList'] }}"
                     class="menu-dropdown-item group"
-                    :class="page === 'basicTables' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    :class="page === 'daftarDosen' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
                     Daftar Dosen
                   </a>
                 </li>
                 <li>
                   <a
-                    href="data-tables.html"
+                    href="{{ $kelasRoutes[$userRole]['mahasiswaList'] }}"
                     class="menu-dropdown-item group"
-                    :class="page === 'dataTables' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    :class="page === 'daftarMahasiswa' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
                     Daftar Mahasiswa
                   </a>
@@ -414,16 +424,16 @@
           </li>
           <!-- Menu Item Charts -->
 
-          <!-- Menu Item Ui Elements -->
+          <!-- Menu Item Sign Out -->
           <li>
             <a
               href="#"
-              @click.prevent="selected = (selected === 'UiElements' ? '':'UiElements')"
+              @click.prevent="document.getElementById('logout-form').submit();"
               class="menu-item group"
-              :class="(selected === 'UiElements') || (page === 'alerts' || page === 'avatars' || page === 'badge' || page === 'breadcrumb' || page === 'buttons' || page === 'buttonsGroup' || page === 'cards'|| page === 'carousel' || page === 'dropdowns' || page === 'images' || page === 'list' || page === 'modals' || page === 'notifications' || page === 'pagination' || page === 'popovers' || page === 'progress' || page === 'spinners' || page === 'tooltips' || page === 'videos') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'SignOut') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'UiElements') || (page === 'alerts' || page === 'avatars' || page === 'badge' || page === 'breadcrumb' || page === 'buttons' || page === 'buttonsGroup' || page === 'cards'|| page === 'carousel' || page === 'dropdowns' || page === 'images' || page === 'list' || page === 'modals' || page === 'notifications' || page === 'pagination' || page === 'popovers' || page === 'progress' || page === 'spinners' || page === 'tooltips' || page === 'videos') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                :class="(selected === 'SignOut') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -433,7 +443,7 @@
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z"
+                  d="M15.1007 19.247C14.6865 19.247 14.3507 18.9112 14.3507 18.497L14.3507 14.245H12.8507V18.497C12.8507 19.7396 13.8581 20.747 15.1007 20.747H18.5007C19.7434 20.747 20.7507 19.7396 20.7507 18.497L20.7507 5.49609C20.7507 4.25345 19.7433 3.24609 18.5007 3.24609H15.1007C13.8581 3.24609 12.8507 4.25345 12.8507 5.49609V9.74501L14.3507 9.74501V5.49609C14.3507 5.08188 14.6865 4.74609 15.1007 4.74609L18.5007 4.74609C18.9149 4.74609 19.2507 5.08188 19.2507 5.49609L19.2507 18.497C19.2507 18.9112 18.9149 19.247 18.5007 19.247H15.1007ZM3.25073 11.9984C3.25073 12.2144 3.34204 12.4091 3.48817 12.546L8.09483 17.1556C8.38763 17.4485 8.86251 17.4487 9.15549 17.1559C9.44848 16.8631 9.44863 16.3882 9.15583 16.0952L5.81116 12.7484L16.0007 12.7484C16.4149 12.7484 16.7507 12.4127 16.7507 11.9984C16.7507 11.5842 16.4149 11.2484 16.0007 11.2484L5.81528 11.2484L9.15585 7.90554C9.44864 7.61255 9.44847 7.13767 9.15547 6.84488C8.86248 6.55209 8.3876 6.55226 8.09481 6.84525L3.52309 11.4202C3.35673 11.5577 3.25073 11.7657 3.25073 11.9984Z"
                   fill=""
                 />
               </svg>
@@ -445,8 +455,11 @@
                 Sign Out
               </span>
             </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+              @csrf
+            </form>
           </li>
-          <!-- Menu Item Ui Elements -->
+          <!-- Menu Item Sign Out -->
 
         </ul>
       </div>

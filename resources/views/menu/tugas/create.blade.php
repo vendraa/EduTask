@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard | EduTask')
-@section('page', 'dashboard')
-@section('selected', 'Dashboard')
-@section('pageName', 'Dashboard')
+@section('title', 'Tambah Tugas | EduTask')
+@section('page', 'taskAdd')
+@section('selected', 'taskAdd')
+@section('pageName', 'Tambah Tugas')
 
 @section('content')
   <div
@@ -11,10 +11,10 @@
   >
     <div class="mx-auto w-full max-w-[630px] text-center">
       <h3 class="mb-4 text-theme-xl font-semibold text-gray-800 dark:text-white/90 sm:text-2xl">
-        Dashboard
+        Tambah Tugas
       </h3>
       <p class="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
-        Halaman Dashboard sedang dalam tahap pengembangan.
+        Halaman Tambah Tugas sedang dalam tahap pengembangan.
       </p>
     </div>
   </div>

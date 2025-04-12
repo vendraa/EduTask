@@ -96,7 +96,7 @@
                       />
                       <span
                         @click="showPassword = !showPassword"
-                        class="absolute z-30 text-gray-500 -translate-y-1/2 cursor-pointer right-4 top-1/2 dark:text-gray-400"
+                        class="absolute right-4 top-0 bottom-0 flex items-center cursor-pointer text-gray-500 dark:text-gray-400"
                       >
                         <svg
                           x-show="!showPassword"
@@ -150,7 +150,7 @@
                     />
                     <span
                         @click="showPasswordConfirm = !showPasswordConfirm"
-                        class="absolute z-30 text-gray-500 -translate-y-1/2 cursor-pointer right-4 top-1/2 dark:text-gray-400"
+                        class="absolute right-4 top-0 bottom-0 flex items-center cursor-pointer text-gray-500 dark:text-gray-400"
                     >
                         <!-- Eye icon hidden/shown based on password visibility -->
                         <svg
