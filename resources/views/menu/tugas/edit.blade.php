@@ -1,22 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Tugas | EduTask')
-@section('page', 'taskAdd')
-@section('selected', 'taskAdd')
-@section('pageName', 'Halaman Tambah Tugas')
+@section('title', 'Edit Tugas | EduTask')
+@section('page', 'taskEdit')
+@section('selected', 'taskEdit')
+@section('pageName', 'Halaman Edit Tugas')
 
 @section('content')
   <div
-    class="rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
+    class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
   >
     <div class="mx-auto w-full max-w-[630px] text-center">
       <h3 class="mb-4 text-theme-xl font-semibold text-gray-800 dark:text-white/90 sm:text-2xl">
-        Tambah Tugas
+        Edit Tugas
       </h3>
     </div>
     
-    <form method="POST" enctype="multipart/form-data" action="{{ route('assignments.dosen.store') }}">
-      @csrf
+    <form method="POST" enctype="multipart/form-data" action="{{ route('assignments.dosen.update', $assignment->id) }}">
+        @csrf
+        @method('PUT')
 
       <div class="mb-5">
         <label
@@ -27,6 +28,7 @@
         <input
           type="text"
           name="title"
+          value="{{ old('title', $assignment->title) }}"
           class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
           required
         />
@@ -43,8 +45,7 @@
           name="description"
           rows="6"
           class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-        ></textarea>
-  
+        >{{ old('description', $assignment->description) }}</textarea>
       </div>
   
       <div class="mb-5 grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -59,6 +60,7 @@
             <input
               type="datetime-local"
               name="start_date"
+              value="{{ old('start_date', \Carbon\Carbon::parse($assignment->start_date)->format('Y-m-d\TH:i')) }}"
               class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               onclick="this.showPicker()"
               required
@@ -96,6 +98,7 @@
             <input
               type="datetime-local"
               name="deadline"
+              value="{{ old('deadline', \Carbon\Carbon::parse($assignment->deadline)->format('Y-m-d\TH:i')) }}"
               placeholder="Select date"
               class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               onclick="this.showPicker()"
@@ -122,15 +125,17 @@
             </span>
           </div>
         </div>
-      </div>
+      </div>>
   
       <div class="flex items-center justify-end gap-5 mt-5">
         <button type="submit" name="submit" value="buat" class="px-4 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
           Buat Tugas
         </button>
-        <button type="submit" name="submit" value="buat_lagi" class="px-4 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
-          Simpan & Buat Lagi
-        </button>
+        <a class="px-4 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600"
+           href="{{ route('assignments.dosen.index') }}"
+        >
+          Cancel
+        </a>
       </div> 
     </form>
     

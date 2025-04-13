@@ -7,6 +7,9 @@
     <title>@yield('title', 'EduTask')</title>
 
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
 

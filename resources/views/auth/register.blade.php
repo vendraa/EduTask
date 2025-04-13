@@ -224,10 +224,9 @@
             <div class="flex flex-col items-center max-w-xs">
               <a href="{{ route('register') }}" class="block mb-4">
                 <img src="./images/logo/auth-logo.png" alt="Logo" />
-              </a>
-              <p class="text-center text-gray-400 dark:text-white/60">
-                Free and Open-Source Tailwind CSS Admin Dashboard Template
-              </p>
+                <p class="text-center text-gray-400 dark:text-white/60">
+                  Sistem Manajemen Pengumpulan Tugas Kuliah Berbasis Web yang Praktis dan Efisien
+                </p>                
             </div>
           </div>
         </div>

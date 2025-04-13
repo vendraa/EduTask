@@ -101,42 +101,6 @@
           </li>
           <!-- Menu Item Dashboard -->
 
-          <!-- Menu Item Pengumuman -->
-          @php
-            $userRole = auth()->user()?->role;
-            $pengumumanRoute = $userRole === 'dosen' ? route('announcement.dosen.index') : route('announcement.mahasiswa.index');
-            $isPengumumanActive = ($selected ?? '') === 'Pengumuman' || ($page ?? '') === 'pengumuman';
-          @endphp
-          <li>
-            <a
-              href="{{ $pengumumanRoute }}"
-              @click="selected = (selected === 'Pengumuman' ? '' : 'Pengumuman')"
-              class="menu-item group"
-              :class="{{ json_encode($isPengumumanActive) }} ? 'menu-item-active' : 'menu-item-inactive'"
-            >
-            <svg
-                :class="{{ json_encode($isPengumumanActive) }} ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V9V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V9V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM8 5.25H5.5C5.08579 5.25 4.75 5.58579 4.75 6V8.25H19.25V6C19.25 5.58579 18.9142 5.25 18.5 5.25H16H8ZM19.25 9.75H4.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75Z"
-                  fill=""
-                />
-              </svg>
-          
-              <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                Pengumuman
-              </span>
-            </a>
-          </li>
-          <!-- Menu Item Pengumuman -->
-
           <!-- Menu Item Task -->
           @php
             $currentPage = $page ?? '';
@@ -147,14 +111,11 @@
         
             $taskRoutes = [
                 'dosen' => [
-                    'create' => route('tasks.dosen.create'),
-                    'list' => route('tasks.dosen.index'),
-                    'submitted' => route('tasks.dosen.submitted'),
-                    'history' => route('tasks.dosen.history'),
+                    'create' => route('assignments.dosen.create'),
+                    'list' => route('assignments.dosen.index'),
                 ],
                 'mahasiswa' => [
-                    'list' => route('tasks.mahasiswa.index'),
-                    'history' => route('tasks.mahasiswa.history'),
+                    'list' => route('assignments.mahasiswa.index'),
                 ],
             ];
           @endphp
@@ -220,33 +181,12 @@
                                   Daftar Tugas
                               </a>
                           </li>
-                          <li>
-                              <a href="{{ $taskRoutes['dosen']['submitted'] }}"
-                                  class="menu-dropdown-item group"
-                                  :class="page === 'taskSubmitted' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                                  Tugas Terkumpul
-                              </a>
-                          </li>
-                          <li>
-                              <a href="{{ $taskRoutes['dosen']['history'] }}"
-                                  class="menu-dropdown-item group"
-                                  :class="page === 'taskHistory' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                                  Riwayat Tugas
-                              </a>
-                          </li>
                       @elseif ($userRole === 'mahasiswa')
                           <li>
                               <a href="{{ $taskRoutes['mahasiswa']['list'] }}"
                                   class="menu-dropdown-item group"
                                   :class="page === 'taskList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
                                   Daftar Tugas
-                              </a>
-                          </li>
-                          <li>
-                              <a href="{{ $taskRoutes['mahasiswa']['history'] }}"
-                                  class="menu-dropdown-item group"
-                                  :class="page === 'taskHistory' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                                  Riwayat Tugas
                               </a>
                           </li>
                       @endif
@@ -393,13 +333,13 @@
           <!-- Menu Item Charts -->
           <li>
             <a
-              href="#"
-              @click.prevent="selected = (selected === 'Charts' ? '':'Charts')"
+              href="{{ auth()->user()->role === 'mahasiswa' ? route('profile.mahasiswa.edit') : route('profile.dosen.edit') }}"
+              @click="selected = 'profile'"
               class="menu-item group"
-              :class="(selected === 'Charts') || (page === 'lineChart' || page === 'barChart' || page === 'pieChart') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'profile') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'Charts') || (page === 'lineChart' || page === 'barChart' || page === 'pieChart') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                :class="(selected === 'profile') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -413,7 +353,7 @@
                   fill=""
                 />
               </svg>
-
+          
               <span
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
@@ -422,6 +362,7 @@
               </span>
             </a>
           </li>
+          
           <!-- Menu Item Charts -->
 
           <!-- Menu Item Sign Out -->

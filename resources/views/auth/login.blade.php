@@ -46,8 +46,9 @@
                 </p>
               </div>
               <div>
-                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-                  <button
+                <div class="flex justify-center">
+                  <a
+                    href="{{ route('google.redirect') }}"
                     class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
                   >
                     <svg
@@ -75,25 +76,7 @@
                       />
                     </svg>
                     Sign in with Google
-                  </button>
-                  <button
-                    class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
-                  >
-                    <svg
-                      width="21"
-                      class="fill-current"
-                      height="20"
-                      viewBox="0 0 21 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z"
-                      />
-                    </svg>
-
-                    Sign in with X
-                  </button>
+                  </a>
                 </div>
                 <div class="relative py-3 sm:py-5">
                   <div class="absolute inset-0 flex items-center">
@@ -117,7 +100,7 @@
                       <label
                         class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
                       >
-                        Email<span class="text-error-500">*</span>
+                        Email
                       </label>
                       <input
                         type="email"
@@ -127,7 +110,7 @@
                         class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                       />
                       @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-error-500">{{ $message }}</div>
                       @enderror
                     </div>
                     <!-- Password -->
@@ -135,7 +118,7 @@
                       <label
                         class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
                       >
-                        Password<span class="text-error-500">*</span>
+                        Password
                       </label>
                       <div x-data="{ showPassword: false }" class="relative">
                         <input
@@ -183,7 +166,7 @@
                           </svg>
                         </span>
                         @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-error-500">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
@@ -227,11 +210,6 @@
                           Keep me logged in
                         </label>
                       </div>
-                      <a
-                        href="/reset-password.html"
-                        class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                        >Forgot password?</a
-                      >
                     </div>
                     <!-- Button -->
                     <div>
@@ -273,8 +251,8 @@
                 <img src="./images/logo/auth-logo.png" alt="Logo" />
               </a>
               <p class="text-center text-gray-400 dark:text-white/60">
-                Free and Open-Source Tailwind CSS Admin Dashboard Template
-              </p>
+                Sistem Manajemen Pengumpulan Tugas Kuliah Berbasis Web yang Praktis dan Efisien
+              </p>              
             </div>
           </div>
         </div>
