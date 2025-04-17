@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified', 'role:dosen'])->group(function() {
     Route::post('dosen/tabmbah-users-baru/store', [ManajemenKelasController::class, 'storeUsers'])->name('store.users');
 
     Route::get('dosen/profile/edit', [ProfileController::class, 'edit'])->name('profile.dosen.edit');
-    Route::put('dosen/profile/update', [ProfileController::class, 'update'])->name('profile.dosen.edit');
+    Route::put('dosen/profile/update', [ProfileController::class, 'update'])->name('profile.dosen.update');
 });
 
 require __DIR__.'/auth.php';
