@@ -73,6 +73,4 @@ class Assignment extends Model
     
         return $status;
     }
-    
-    
 }

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use App\Models\Assignment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -18,15 +21,18 @@ Route::middleware(['auth', 'verified', 'role:mahasiswa'])->group(function() {
     Route::get('mahasiswa/pengumuman', [PengumumanController::class, 'index'])->name('announcement.mahasiswa.index');
 
     Route::get('mahasiswa/daftar-tugas', [TugasController::class, 'index'])->name('assignments.mahasiswa.index');
-    Route::get('mahasiswa/tugas/pengumpulan-tugas/{assignment}', [TugasController::class, 'submission'])->name('assignment.mahasiswa.submission');
-    Route::post('mahasiswa/tugas/pengumpulan-tugas/{assignment}', [TugasController::class, 'storeSubmission'])->name('assignment.mahasiswa.submission.store');
+    Route::get('mahasiswa/tugas/pengumpulan-tugas/{assignment}', [TugasController::class, 'submission'])->name('assignments.mahasiswa.submission');
+    Route::post('mahasiswa/tugas/pengumpulan-tugas/{assignment}', [TugasController::class, 'storeSubmission'])->name('assignments.mahasiswa.submission.store');
 
     Route::get('mahasiswa/riwayat-tugas', [TugasController::class, 'history'])->name('assignments.mahasiswa.history');
 
     Route::get('mahasiswa/daftar-dosen', [ManajemenKelasController::class, 'daftarDosen'])->name('daftarDosen.mahasiswa.index');
     Route::get('mahasiswa/daftar-mahasiswa', [ManajemenKelasController::class, 'daftarMahasiswa'])->name('daftarMahasiswa.mahasiswa.index');
+    Route::get('mahasiswa/tambah-users-baru', [ManajemenKelasController::class, 'createUsers'])->name('create.users');
+    Route::post('mahasiswa/tabmbah-users-baru/store', [ManajemenKelasController::class, 'storeUsers'])->name('store.users');
 
     Route::get('mahasiswa/profile/edit', [ProfileController::class, 'edit'])->name('profile.mahasiswa.edit');
+    Route::put('mahasiswa/profile/update', [ProfileController::class, 'update'])->name('profile.mahasiswa.update');
 });
 
 Route::middleware(['auth', 'verified', 'role:dosen'])->group(function() {
@@ -48,21 +54,11 @@ Route::middleware(['auth', 'verified', 'role:dosen'])->group(function() {
 
     Route::get('dosen/daftar-dosen', [ManajemenKelasController::class, 'daftarDosen'])->name('daftarDosen.dosen.index');
     Route::get('dosen/daftar-mahasiswa', [ManajemenKelasController::class, 'daftarMahasiswa'])->name('daftarMahasiswa.dosen.index');
+    Route::get('dosen/tambah-users-baru', [ManajemenKelasController::class, 'createUsers'])->name('create.users');
+    Route::post('dosen/tabmbah-users-baru/store', [ManajemenKelasController::class, 'storeUsers'])->name('store.users');
 
     Route::get('dosen/profile/edit', [ProfileController::class, 'edit'])->name('profile.dosen.edit');
+    Route::put('dosen/profile/update', [ProfileController::class, 'update'])->name('profile.dosen.edit');
 });
-
-Route::get('/api/tugas', function (Illuminate\Http\Request $request) {
-    $search = $request->input('search');
-    $query = \App\Models\Assignment::with('lecturer')->orderByDesc('start_date');
-
-    if ($search) {
-        $query->where('title', 'like', "%{$search}%")
-              ->orWhereHas('lecturer', fn($q) => $q->where('name', 'like', "%{$search}%"));
-    }
-
-    return $query->limit(100)->get(); // Bisa ditambahkan pagination jika mau
-});
-
 
 require __DIR__.'/auth.php';

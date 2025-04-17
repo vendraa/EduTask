@@ -20,23 +20,25 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Cek apakah user sudah ada
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if (!$user) {
-                // Create user baru jika belum ada
                 $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
                     'password' => Hash::make(uniqid()), // generate password random
                     'email_verified_at' => now(),
-                    'role' => 'mahasiswa', // atau 'dosen' sesuai kebutuhanmu
+                    'role' => 'mahasiswa',
                 ]);
             }
 
             Auth::login($user);
 
-            return redirect()->intended('mahasiswa/dashboard'); // sesuaikan redirect
+            if ($user->role === 'dosen') {
+                return redirect()->route('dashboard.dosen');
+            } else {
+                return redirect()->route('dashboard.mahasiswa');
+            }
         } catch (\Exception $e) {
             return redirect()->route('login')->withErrors([
                 'email' => 'Login dengan Google gagal!',
@@ -44,4 +46,3 @@ class GoogleController extends Controller
         }
     }
 }
-

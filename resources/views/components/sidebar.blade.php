@@ -358,7 +358,7 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Your Profile
+                My Profile
               </span>
             </a>
           </li>

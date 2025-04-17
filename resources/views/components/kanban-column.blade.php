@@ -46,7 +46,7 @@
         {{-- Link Detail --}}
         <div class="mt-2">
           @if (!is_array($task))
-            <a href="{{ route('assignment.mahasiswa.submission', $task->id) }}" class="text-indigo-600 dark:text-indigo-400 text-sm hover:underline">
+            <a href="{{ route('assignments.mahasiswa.submission', $task->id) }}" class="text-indigo-600 dark:text-indigo-400 text-sm hover:underline">
               Lihat Detail
             </a>
           @endif

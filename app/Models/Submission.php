@@ -25,13 +25,11 @@ class Submission extends Model
         'submitted_at' => 'datetime',
     ];
 
-    // Relasi ke Assignment
     public function assignment()
     {
         return $this->belongsTo(Assignment::class);
     }
 
-    // Relasi ke Student (User)
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');

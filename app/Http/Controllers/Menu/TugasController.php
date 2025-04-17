@@ -17,16 +17,18 @@ class TugasController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $perPage = (int) $request->input('perPage', 10); // Mengambil parameter jumlah per halaman (default 10)
-        
-        // Ambil data assignments dengan paginasi
+        $perPage = (int) $request->input('perPage', 10); 
+        $search = $request->input('search');
+
         $assignmentsQuery = Assignment::with('lecturer')->orderBy('start_date', 'desc');
-        
-        // Jika user adalah mahasiswa
+
+        if ($search) {
+            $assignmentsQuery->where('title', 'like', '%' . $search . '%');
+        }
+
         if ($user->role === 'mahasiswa') {
             $studentId = $user->id;
             
-            // Untuk pagination, kita tidak perlu collect() untuk memisahkan tugas
             $todoTasks = collect();
             $missedTasks = collect();
             $completedTasks = collect();
@@ -67,6 +69,7 @@ class TugasController extends Controller
         // Kembalikan view dengan data paginasi
         return view('menu.tugas.index', [
             'assignments' => $assignments,
+            'search' => $search,
         ]);
     }
 
@@ -164,18 +167,20 @@ class TugasController extends Controller
            }
    
            foreach ($uploadedFiles as $file) {
-               $path = $file->store('submissions', 'public');
-               $submission->files()->create([
-                   'file' => $path,
-               ]);
-           }
+                $originalName = str_replace(' ', '_', $file->getClientOriginalName());
+                $path = $file->storeAs('submissions', $originalName, 'public');
+            
+                $submission->files()->create([
+                    'file' => $path,
+                ]);
+            }        
    
            DB::commit();
    
            return response()->json([
                'status' => 'success',
                'message' => 'Tugas berhasil dikumpulkan.',
-               'redirect' => route('tasks.mahasiswa.history') // optional
+               'redirect' => route('assignments.mahasiswa.submission', $assignment->id)
            ]);
        } catch (\Exception $e) {
            DB::rollBack();

@@ -6,133 +6,161 @@
 @section('pageName', 'Halaman Tambah Tugas')
 
 @section('content')
-  <div
-    class="rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
-  >
-    <div class="mx-auto w-full max-w-[630px] text-center">
-      <h3 class="mb-4 text-theme-xl font-semibold text-gray-800 dark:text-white/90 sm:text-2xl">
-        Tambah Tugas
-      </h3>
-    </div>
-    
-    <form method="POST" enctype="multipart/form-data" action="{{ route('assignments.dosen.store') }}">
-      @csrf
-
-      <div class="mb-5">
-        <label
-          class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-        >
-          Judul Tugas
-        </label>
-        <input
-          type="text"
-          name="title"
-          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-          required
-        />
+  <div class="space-y-5 sm:space-y-6">
+    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 shadow-sm">
+      <div class="px-6 py-5 sm:px-8 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+          <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+          </svg>
+          Buat Tugas Baru
+        </h3>
       </div>
-      <div class="mb-5">
-        <label
-          class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-        >
-          Deskripsi Tugas
-        </label>
-        <textarea
-          placeholder="Enter a description..."
-          type="text"
-          name="description"
-          rows="6"
-          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-        ></textarea>
-  
-      </div>
-  
-      <div class="mb-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-          >
-            Tanggal & Waktu Mulai
-          </label>
       
-          <div class="relative">
-            <input
-              type="datetime-local"
-              name="start_date"
-              class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-              onclick="this.showPicker()"
-              required
-            />
-            <span
-              class="pointer-events-none absolute right-4 top-0 bottom-0 flex items-center cursor-pointer text-gray-500 dark:text-gray-400"
-            >
-              <svg
-                class="fill-current"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M6.66659 1.5415C7.0808 1.5415 7.41658 1.87729 7.41658 2.2915V2.99984H12.5833V2.2915C12.5833 1.87729 12.919 1.5415 13.3333 1.5415C13.7475 1.5415 14.0833 1.87729 14.0833 2.2915V2.99984L15.4166 2.99984C16.5212 2.99984 17.4166 3.89527 17.4166 4.99984V7.49984V15.8332C17.4166 16.9377 16.5212 17.8332 15.4166 17.8332H4.58325C3.47868 17.8332 2.58325 16.9377 2.58325 15.8332V7.49984V4.99984C2.58325 3.89527 3.47868 2.99984 4.58325 2.99984L5.91659 2.99984V2.2915C5.91659 1.87729 6.25237 1.5415 6.66659 1.5415ZM6.66659 4.49984H4.58325C4.30711 4.49984 4.08325 4.7237 4.08325 4.99984V6.74984H15.9166V4.99984C15.9166 4.7237 15.6927 4.49984 15.4166 4.49984H13.3333H6.66659ZM15.9166 8.24984H4.08325V15.8332C4.08325 16.1093 4.30711 16.3332 4.58325 16.3332H15.4166C15.6927 16.3332 15.9166 16.1093 15.9166 15.8332V8.24984Z"
-                  fill=""
-                />
-              </svg>
-            </span>
+      <div class="p-5 sm:p-6">
+        <form method="POST" enctype="multipart/form-data" action="{{ route('assignments.dosen.store') }}" class="space-y-6">
+          @csrf
+
+          <!-- Judul -->
+          <div class="grid grid-cols-1 gap-6">
+            <div class="space-y-2">
+              <label for="title" class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                Judul Tugas
+                <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Masukkan judul tugas"
+                required
+                class="block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-800 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+              <p class="text-xs text-gray-500 dark:text-gray-400">Berikan judul yang deskriptif untuk tugas ini</p>
+            </div>
           </div>
-        </div>
-  
-        <div>
-          <label
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-          >
-            Tenggat Waktu
-          </label>
-  
-          <div class="relative">
-            <input
-              type="datetime-local"
-              name="deadline"
-              placeholder="Select date"
-              class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-              onclick="this.showPicker()"
-              required
-            />
-            <span
-              class="pointer-events-none absolute right-4 top-0 bottom-0 flex items-center cursor-pointer text-gray-500 dark:text-gray-400"
-            >
-              <svg
-                class="fill-current"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M6.66659 1.5415C7.0808 1.5415 7.41658 1.87729 7.41658 2.2915V2.99984H12.5833V2.2915C12.5833 1.87729 12.919 1.5415 13.3333 1.5415C13.7475 1.5415 14.0833 1.87729 14.0833 2.2915V2.99984L15.4166 2.99984C16.5212 2.99984 17.4166 3.89527 17.4166 4.99984V7.49984V15.8332C17.4166 16.9377 16.5212 17.8332 15.4166 17.8332H4.58325C3.47868 17.8332 2.58325 16.9377 2.58325 15.8332V7.49984V4.99984C2.58325 3.89527 3.47868 2.99984 4.58325 2.99984L5.91659 2.99984V2.2915C5.91659 1.87729 6.25237 1.5415 6.66659 1.5415ZM6.66659 4.49984H4.58325C4.30711 4.49984 4.08325 4.7237 4.08325 4.99984V6.74984H15.9166V4.99984C15.9166 4.7237 15.6927 4.49984 15.4166 4.49984H13.3333H6.66659ZM15.9166 8.24984H4.08325V15.8332C4.08325 16.1093 4.30711 16.3332 4.58325 16.3332H15.4166C15.6927 16.3332 15.9166 16.1093 15.9166 15.8332V8.24984Z"
-                  fill=""
-                />
-              </svg>
-            </span>
+
+          <!-- Deskripsi -->
+          <div class="grid grid-cols-1 gap-6">
+            <div class="space-y-2">
+              <label for="description" class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                Deskripsi Tugas
+                <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                rows="8"
+                required
+                placeholder="Masukkan deskripsi dan instruksi tugas secara detail..."
+                class="block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-800 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              ></textarea>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Berikan instruksi yang jelas dan detail untuk tugas ini</p>
+            </div>
           </div>
-        </div>
+
+          <!-- Tanggal dan Waktu -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Tanggal Mulai -->
+            <div class="space-y-2">
+              <label for="start_date" class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                Tanggal & Waktu Mulai
+                <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <input
+                  type="datetime-local"
+                  id="start_date"
+                  name="start_date"
+                  onclick="this.showPicker()"
+                  required
+                  class="block w-full pl-10 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-800 dark:text-white focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Tentukan kapan mahasiswa dapat mulai mengerjakan tugas</p>
+            </div>
+
+            <!-- Tenggat Waktu -->
+            <div class="space-y-2">
+              <label for="deadline" class="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                Tenggat Waktu
+                <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="datetime-local"
+                  id="deadline"
+                  name="deadline"
+                  onclick="this.showPicker()"
+                  required
+                  class="block w-full pl-10 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2.5 text-sm text-gray-800 dark:text-white focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Tentukan batas waktu pengumpulan tugas</p>
+            </div>
+          </div>
+
+          <!-- File Lampiran (Optional) -->
+          <div class="grid grid-cols-1 gap-6">
+            <div class="space-y-2">
+              <label for="attachment" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                File Lampiran (Opsional)
+              </label>
+              <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-700 border-dashed rounded-lg">
+                <div class="space-y-1 text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                    <label for="attachment" class="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 focus-within:outline-none">
+                      <span>Upload file</span>
+                      <input id="attachment" name="attachment" type="file" class="sr-only">
+                    </label>
+                    <p class="pl-1">atau drag and drop</p>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    PDF, DOCX, XLSX, JPG, PNG hingga 10MB
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tombol Aksi -->
+          <div class="pt-5 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+            <a href="{{ route('assignments.dosen.index') }}"
+              class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+              Batal
+            </a>
+
+            <button type="submit" name="submit" value="buat"
+              class="inline-flex items-center justify-center rounded-md bg-indigo-600 hover:bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+              <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Buat Tugas
+            </button>
+
+            <button type="submit" name="submit" value="buat_lagi"
+              class="inline-flex items-center justify-center rounded-md bg-indigo-600 hover:bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+              <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Simpan & Buat Lagi
+            </button>
+          </div>
+        </form>
       </div>
-  
-      <div class="flex items-center justify-end gap-5 mt-5">
-        <button type="submit" name="submit" value="buat" class="px-4 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
-          Buat Tugas
-        </button>
-        <button type="submit" name="submit" value="buat_lagi" class="px-4 py-3 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
-          Simpan & Buat Lagi
-        </button>
-      </div> 
-    </form>
-    
+    </div>
   </div>
 @endsection

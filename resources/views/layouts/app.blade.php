@@ -28,6 +28,17 @@
     "
     :class="{ 'dark bg-gray-900': darkMode }"
   >
+  <div x-data="{ isModalOpen: false }">
+    {{-- Modal backdrop & modal component --}}
+    <div
+      x-show="isModalOpen"
+      class="fixed inset-0 z-[100000] flex items-center justify-center bg-black/30"
+    >
+      <div class="bg-white p-6 rounded shadow-xl">
+        <!-- Isi modal -->
+      </div>
+    </div>
+    
     <x-preloader />
 
     <div class="flex h-screen overflow-hidden">

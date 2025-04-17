@@ -223,7 +223,7 @@
                     fill=""
                   />
                 </svg>
-                Your profile
+                My profile
               </a>
             </li>
           </ul>

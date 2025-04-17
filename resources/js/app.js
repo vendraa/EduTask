@@ -78,97 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const fileInput = document.getElementById('uploadTugasInput');
-  const uploadDefault = document.getElementById('uploadDefault');
-  const uploadSelected = document.getElementById('uploadSelected');
-  const fileList = document.getElementById('fileNamesInLabel');
-  const uploadLabel = document.getElementById('uploadLabel');
-
-  let uploadedFiles = [];
-
-  function renderFileList() {
-    fileList.innerHTML = '';
-
-    if (uploadedFiles.length === 0) {
-      uploadDefault.classList.remove('hidden');
-      uploadSelected.classList.add('hidden');
-      return;
-    }
-
-    uploadedFiles.forEach((file, index) => {
-      const li = document.createElement('li');
-      li.classList.add('flex', 'items-center', 'justify-between', 'mb-1');
-
-      const fileNameSpan = document.createElement('span');
-      fileNameSpan.textContent = `${index + 1}. ${file.name}`;
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.innerHTML = '🗑️'; // Bisa diganti SVG icon
-      deleteBtn.classList.add('ml-2', 'text-red-500', 'hover:text-red-700');
-      deleteBtn.setAttribute('type', 'button');
-      deleteBtn.addEventListener('click', () => {
-        uploadedFiles.splice(index, 1);
-        renderFileList();
-      });
-
-      li.appendChild(fileNameSpan);
-      li.appendChild(deleteBtn);
-      fileList.appendChild(li);
-    });
-
-    uploadDefault.classList.add('hidden');
-    uploadSelected.classList.remove('hidden');
-  }
-
-  fileInput.addEventListener('change', function () {
-    const newFiles = Array.from(fileInput.files);
-    uploadedFiles = uploadedFiles.concat(newFiles);
-    renderFileList();
-    fileInput.value = ''; // Reset input agar bisa pilih file yang sama lagi kalau mau
-  });
-
-  const form = document.querySelector('form');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-
-    uploadedFiles.forEach(file => {
-      formData.append('files[]', file);
-    });
-
-    fetch(form.action, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Upload gagal');
-      return response.json();
-    })
-    .then(data => {
-      alert('Upload berhasil!');
-      uploadedFiles = [];
-      fileInput.value = '';
-      renderFileList();
-    })
-    .catch(error => {
-      console.error(error);
-      alert('Terjadi kesalahan saat upload!');
-    });
-  });
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('fileInput');
+  const submitBtn = document.getElementById('submitBtn');
   const uploadDefault = document.getElementById('uploadDefault');
   const uploadSelected = document.getElementById('uploadSelected');
   const fileNamesInLabel = document.getElementById('fileNamesInLabel');
   const submissionForm = document.getElementById('submission-form');
   const submitButton = submissionForm.querySelector('button[type="submit"]');
+
+  fileInput.addEventListener('change', function () {
+    submitBtn.disabled = fileInput.files.length === 0;
+  });
 
   let selectedFiles = [];
 
@@ -186,23 +107,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateFileListUI() {
     fileNamesInLabel.innerHTML = '';
-
+  
     if (selectedFiles.length > 0) {
       uploadDefault.classList.add('hidden');
       uploadSelected.classList.remove('hidden');
-
+  
       selectedFiles.forEach(file => {
         const li = document.createElement('li');
-        li.textContent = file.name;
-
+        li.classList.add('flex', 'items-center', 'justify-between', 'gap-2', 'mb-1');
+  
+        const fileNameSpan = document.createElement('span');
+        fileNameSpan.textContent = file.name;
+  
         const removeButton = document.createElement('button');
-        removeButton.textContent = '❌';
-        removeButton.classList.add('ml-2', 'text-red-500', 'hover:text-red-700');
-        removeButton.addEventListener('click', () => {
+        removeButton.type = 'button';
+        removeButton.classList.add('p-1');
+        removeButton.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke-width="1.5"
+               stroke="currentColor"
+               class="w-5 h-5 text-red-500 hover:text-red-700">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4a1 1 0 011 1v1H9V4a1 1 0 011-1z" />
+          </svg>
+        `;
+  
+        // ❗ Penting: cegah label trigger file input
+        removeButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           selectedFiles = selectedFiles.filter(f => f.name !== file.name);
           updateFileListUI();
+  
+          // Kosongkan fileInput agar bisa upload file dengan nama yang sama lagi
+          fileInput.value = '';
         });
-
+  
+        li.appendChild(fileNameSpan);
         li.appendChild(removeButton);
         fileNamesInLabel.appendChild(li);
       });
@@ -211,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
       uploadSelected.classList.add('hidden');
     }
   }
-
-  submissionForm.addEventListener('submit', function(e) {
+  
+  submissionForm.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const formData = new FormData();
@@ -232,25 +175,26 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: formData
     })
-    .then(response => {
-      if (!response.ok) throw new Error('Gagal mengupload file!');
-      return response.json();
-    })
-    .then(data => {
-      alert('Tugas berhasil dikumpulkan!');
-      location.reload(); // Atau redirect sesuai kebutuhan
-    })
-    .catch(error => {
-      console.error(error);
-      alert('Terjadi kesalahan saat mengupload file.');
-    })
-    .finally(() => {
-      submitButton.disabled = false;
-      submitButton.innerText = 'Kumpulkan Tugas';
-    });
+      .then(async response => {
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Terjadi kesalahan pada server.');
+        }
+
+        alert(data.message || 'Tugas berhasil dikumpulkan!');
+        window.location.href = data.redirect || window.location.href;
+      })
+      .catch(error => {
+        console.error('Catch error:', error);
+        alert(error.message || 'Terjadi kesalahan saat mengupload file.');
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+        submitButton.innerText = 'Kumpulkan Tugas';
+      });
   });
 });
-
 
 // Document Loaded
 document.addEventListener("DOMContentLoaded", () => {

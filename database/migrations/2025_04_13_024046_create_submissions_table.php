@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            $table->string('file'); // file tugas yang diunggah
-            $table->timestamp('submitted_at'); // waktu pengumpulan
+            $table->string('file'); 
+            $table->timestamp('submitted_at'); 
             $table->timestamps();
     
-            $table->unique(['assignment_id', 'student_id']); // hanya boleh 1 kali pengumpulan per tugas per mahasiswa
+            $table->unique(['assignment_id', 'student_id']); 
         });
     }
     
@@ -28,13 +28,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drop foreign key constraints first
         Schema::table('submissions', function (Blueprint $table) {
-            $table->dropForeign(['assignment_id']); // Menghapus foreign key constraint untuk kolom assignment_id
-            $table->dropForeign(['student_id']); // Menghapus foreign key constraint untuk kolom student_id
+            $table->dropForeign(['assignment_id']); 
+            $table->dropForeign(['student_id']); 
         });
     
-        // Drop the table after dropping foreign key constraints
         Schema::dropIfExists('submissions');
     }    
 };
